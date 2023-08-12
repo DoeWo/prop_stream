@@ -1,11 +1,8 @@
 import streamlit as str
 import streamlit_extras as stre
-import numpy as np
-import pandas as pd
-import numpy_financial as npf
 
 from streamlit_toggle import st_toggle_switch
-from dateutil.relativedelta import relativedelta
+from modules.kreditrechner import Tilgungsplan
 
 with str.container() as container0:
     str.title("Bruttokaufpreis ermitteln")
@@ -26,7 +23,7 @@ with str.container() as container0:
 
     str.write(f"der Bruttokaufpreis ist: {bruttokaufpreis}")
 
-
+str.divider()
 
 with str.container() as container1:
     str.title("Kreditrechner")
@@ -45,15 +42,25 @@ with str.container() as container1:
     else:
         str.write(f"Der Kreditbetrag ist: {kreditbetrag}")
         kreditlaufzeit = str.number_input(label="Kreditlaufzeit in Jahren eingeben: ", step=1)
-        zinssatz = str.number_input(label="Zinssatz eingeben: ", step=0.01)/100
+        zinssatz = str.number_input(label="Zinssatz eingeben: ", step=0.01)
+        quartalsgebühren = str.number_input(label="Quartalsgebühren eingeben: ", step=1, value=50)
 
-        rate = round(-npf.pmt(zinssatz/12, kreditlaufzeit*12, kreditbetrag),2)
+        tp = Tilgungsplan(kreditbetrag=projektsumme, kreditlaufzeitInJahren=kreditlaufzeit, zinssatz=zinssatz, quartalsgebuehren=quartalsgebühren).tilgungsplan_erstellen()
+        rate = round(tp.rate.mean(),2)
 
-        str.write("Die Kreditrate ist:", rate)
+        str.write(f"Die Kreditrate ist: {rate}")
+        str.write(f"Der zurückgezahlte Gesamtbetrag ist: {(rate * kreditlaufzeit * 12):.2f}")
 
+str.divider()
 
 with str.container() as container2:
     str.header(":mailbox: kontaktiere mich!")
+    str.markdown("bitte schreib mir wenn du auf dem aktuellsten Stand gehalten werden willst")
+    str.markdown('''kommende Features:  
+                 **- Bankkennzahlen (DSTI, LTV)**  
+                 **- Tilgungsplan (Export als .xlsx)**  
+                 **- Zinssimulation (Monte Carlo)**  
+                 **- Rentabilitätsrechner AirBnB**''')
 
     contact_form = """
     <form action="https://formsubmit.co/doedlingerwolfgang@gmail.com" method="POST">
