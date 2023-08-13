@@ -1,7 +1,5 @@
 import streamlit as str
 import streamlit_extras as stre
-import locale
-locale.setlocale(locale.LC_ALL, 'de_DE.utf8')
 
 from streamlit_toggle import st_toggle_switch
 from modules.kreditrechner import Tilgungsplan
