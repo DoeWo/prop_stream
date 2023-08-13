@@ -3,6 +3,7 @@ import streamlit_extras as stre
 
 from streamlit_toggle import st_toggle_switch
 from modules.kreditrechner import Tilgungsplan
+from modules.euriborparser import EuriborParser
 
 with str.container() as container0:
     str.title("Bruttokaufpreis ermitteln")
@@ -27,14 +28,20 @@ str.divider()
 
 with str.container() as container1:
     str.title("Kreditrechner")
-    toggle = st_toggle_switch(
-        label="Kaufpreis übernehmen",
-        key="swicht_1",
-        default_value=False,
-        label_after=False
-    )
+
+    col1, col2 = str.columns([0.25, 0.75], gap="small")
+
+    with col1:
+        toggle = st_toggle_switch(
+            label="Kaufpreis übernehmen",
+            key="swicht_1",
+            default_value=False,
+            label_after=False
+        )
     
-    projektsumme = str.number_input(label="Projektsumme eingeben: ", step=1, value=int(bruttokaufpreis) if toggle else 0)
+    with col2:
+        projektsumme = str.number_input(label="Projektsumme eingeben: ", step=1, value=int(bruttokaufpreis) if toggle else 0)
+
     eigenmittel = str.number_input(label="Eigenmittel eingeben", step=1)
     kreditbetrag = projektsumme - eigenmittel
     if kreditbetrag < 0:
@@ -42,7 +49,19 @@ with str.container() as container1:
     else:
         str.write(f"Der Kreditbetrag ist: {kreditbetrag}")
         kreditlaufzeit = str.number_input(label="Kreditlaufzeit in Jahren eingeben: ", step=1)
-        zinssatz = str.number_input(label="Zinssatz eingeben: ", step=0.01)
+
+        col1, col2 = str.columns([0.7,0.3])
+        
+        with col1:
+            zinssatz = str.number_input(label="Zinssatz eingeben: ", step=0.01, help="so ungefähr 1 - 2 Aufschlag auf EURIBOR")
+
+        with col2:
+            euribor = EuriborParser()
+            euribor_df = euribor.parse_current()
+            str.markdown(" ")
+            str.markdown(f"""3M-EURIBOR {euribor_df.index[0].date()}:  
+                         {(euribor_df.iloc[0].values[0]):.2f}%""")
+
         quartalsgebühren = str.number_input(label="Quartalsgebühren eingeben: ", step=1, value=50)
 
         tp = Tilgungsplan(kreditbetrag=projektsumme, kreditlaufzeitInJahren=kreditlaufzeit, zinssatz=zinssatz, quartalsgebuehren=quartalsgebühren).tilgungsplan_erstellen()

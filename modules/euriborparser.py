@@ -1,5 +1,6 @@
 import requests as r
 import datetime as dt
+import pandas as pd
 
 from bs4 import BeautifulSoup
 
@@ -12,7 +13,8 @@ class EuriborParser():
     URL_CURR = 'https://www.euribor-rates.eu/en/current-euribor-rates/2/euribor-rate-3-months/'
     YEARS = list(range(1999,dt.datetime.today().year + 1))
 
-    def __init__(self):
+    def __init__(self, current_euribor=None):
+        self.current_euribor = pd.DataFrame(columns=["3M_EURIBOR"], index=pd.DatetimeIndex([]))
         pass
     
 
@@ -23,17 +25,28 @@ class EuriborParser():
         """
         This function gets the most recent EURIBOR value
         """
-        request = r.get(EuriborParser.URL_CURR)
-        soup = BeautifulSoup(request.content, 'lxml')
-        current_table = soup.find('div', class_="col-12 col-lg-4 mb-3 mb-lg-0")
-        first_row = current_table.find('tbody').find('tr')
-        date = first_row.find_all('td')[0].text
-        percentage = first_row.find_all('td')[1].text.strip()
-        result_dict = {date: percentage}
-        return result_dict
+        try:
+            self.current_euribor = pd.read_csv(r"./data/current_euribor.csv", index_col=0)
+            self.current_euribor.index = pd.to_datetime(self.current_euribor.index)
+            self.current_euribor.index.freq = "B"
+            print("read from csv")
+        except (KeyError, FileNotFoundError):
+            request = r.get(EuriborParser.URL_CURR)
+            soup = BeautifulSoup(request.content, 'lxml')
+            current_table = soup.find('div', class_="col-12 col-lg-4 mb-3 mb-lg-0")
+            first_row = current_table.find('tbody').find('tr')
+            date = first_row.find_all('td')[0].text
+            percentage = first_row.find_all('td')[1].text.strip().rstrip(" %")
+            date = dt.datetime.strptime(date, "%m/%d/%Y")
+            self.current_euribor.loc[date] = percentage
+            self.current_euribor.index.freq = "B"         
+            self.current_euribor.to_csv(r"./data/current_euribor.csv")
+            print("read from Homepage")
+        return self.current_euribor
 
 
 if __name__ == "__main__":
     test = EuriborParser()
     current = test.parse_current()
-    print(current)
+    print(current[0])
+    print(current.index)
