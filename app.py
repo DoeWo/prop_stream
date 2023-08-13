@@ -54,10 +54,37 @@ with str.container() as container1:
 str.divider()
 
 with str.container() as container2:
+    str.header("Bankkenzahl DSTI")
+    str.markdown("""Teil der Bonitätsprüfung einer Bank ist die Kennzahl **DSTI**.  
+                 Die **DSTI** oder Debt Service to Income, ist eine Verhältniszahl und sollte sich im Bereich zwischen 0.4 und 0.5 aufhalten.  
+                 Sie errechnet sich aus: Kreditrate pro Monat / Nettoeinkommen pro Monat.  
+                 Wörtlich: Die Kreditrate sollte nicht mehr als 40% - 50% deines Einkommen ausmachen (je weniger desto besser)""")
+    dsti = str.slider(
+        label="Wie hoch soll die DSTI sein?",
+        min_value=0.01, 
+        max_value=1.00,
+        value=0.40,
+        step=0.01
+    )
+    str.markdown(f"""Um einen Kredit mit der oben berechneten Rate bedienen zu können und eine **DSTI von {dsti}** zu erfüllen müsstest du  
+                 **{(rate/dsti):.2f}**  
+                 netto pro Monat verdienen""")
+
+    str.markdown("""**ACHTUNG** - natürlich fließen in eine Bonitätsprüfung einer Bank viel mehr Faktoren ein wie zum Beispiel:  
+                 - eine positive Haushaltsrechnung  
+                 - Besicherung (LTV)
+                 - Kontoverhalten  
+                 - soft Facts (Dienstverhältins, ...)""")
+                   
+    str.markdown("""Weiters wird für die Berechnung der DSTI noch ein erhöhter Zinssatz angesetzt (in dem Beispiel nicht - ist noch in arbeit - stay tuned :e-mail: :arrow_down_small:)""")
+    str.markdown("Details zu den Kennzahlen findet man bei der **[Nationalbank](https://www.oenb.at/finanzmarkt/makroprudenzielle-aufsicht/massnahmen_und_methoden/begrenzung_systemischer_risiken_aus_der_immobilienfinanzierung.html)**")
+
+str.divider()
+
+with str.container() as container3:
     str.header(":mailbox: kontaktiere mich!")
     str.markdown("bitte schreib mir wenn du auf dem aktuellsten Stand gehalten werden willst. Nach jedem Deployment von neuen Features wirst du dann eine E-Mail erhalten")
-    str.markdown('''kommende Features:  
-                 **- Bankkennzahlen (DSTI, LTV)**  
+    str.markdown('''kommende Features:    
                  **- Tilgungsplan inkl. Kreditdashboard (Export als .xlsx)**  
                  **- Zinssimulation auf Basis 3M EURIBOR (Monte Carlo)**  
                  **- Rentabilitätsrechner AirBnB**''')
