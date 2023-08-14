@@ -61,7 +61,7 @@ with str.container() as container1:
             euribor_df = euribor.parse_current()
             str.markdown(" ")
             str.markdown(f"""3M-EURIBOR {euribor_df.index[-1].date()}:  
-                         {(euribor_df.iloc[-1].values[0]):.2f}%""", help="wird jeden Werktag um 23:00 aktualisiert")
+                         {(euribor_df.iloc[-1].values[0]):.2f}%""", help="immer der 3M EURIBOR vom Vortag")
 
         quartalsgebühren = str.number_input(label="Quartalsgebühren eingeben: ", step=1, value=50)
 
