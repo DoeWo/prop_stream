@@ -33,6 +33,7 @@ with str.container() as container2:
     contact_form = """
     <form action="https://formsubmit.co/doedlingerwolfgang@gmail.com" method="POST">
         <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://propstream-izj4nbnvujncmstnkfdxhc.streamlit.app/AirBnB_Simulation">
         <input type="text" name="name" placeholder="Dein Name" required>
         <input type="email" name="email" placeholder="Deine E-Mail" required>
         <textarea name="message" placeholder="Deine Nachricht hier"></textarea>
