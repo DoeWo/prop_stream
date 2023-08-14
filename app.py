@@ -9,6 +9,7 @@ from streamlit_extras.buy_me_a_coffee import button
 with str.container() as container0:
     str.title("Bruttokaufpreis ermitteln")
     kaufpreis = str.number_input("Kaufpreis: ", step=1)
+    str.subheader("Kaufnebenkosten:")
     grundbuchseintragung = str.number_input("Grundbuchseintragung in %:", step=0.01, value=1.1)
     grunderwerbssteuer = str.number_input("Grunderwerbssteuer in %:", step=0.01, value=3.5)
     maklerprovision = str.number_input("Maklerprovision in %:", step=0.01, value=3.6)
@@ -65,7 +66,18 @@ with str.container() as container1:
 
         quartalsgebühren = str.number_input(label="Quartalsgebühren eingeben: ", step=1, value=50)
 
-        tp = Tilgungsplan(kreditbetrag=projektsumme, kreditlaufzeitInJahren=kreditlaufzeit, zinssatz=zinssatz, quartalsgebuehren=quartalsgebühren).tilgungsplan_erstellen()
+        str.subheader("Finanzierungsnebenkosten:")
+        vermittlerprovision = str.number_input("Vermittlerprovision eingeben:", step=1)
+        pfandrechtseintragung = str.number_input("Pfrandrechtsgebühr eingeben:", help="ist immer 1,2% von der eingetragenen Summe, normalerweise vom Kreditbetrag", step=0.01,
+                                                 value=kreditbetrag*0.012)
+        
+        tp = Tilgungsplan(
+            kreditbetrag=projektsumme, 
+            kreditlaufzeitInJahren=kreditlaufzeit, 
+            zinssatz=zinssatz, 
+            quartalsgebuehren=quartalsgebühren,
+            vermittlerprovision=vermittlerprovision,
+            pfandrechtseintragung=pfandrechtseintragung).tilgungsplan_erstellen()
         rate = round(tp.rate.mean(),2)
 
         str.write(f"Die Kreditrate ist: {rate}")
