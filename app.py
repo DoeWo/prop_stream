@@ -1,9 +1,10 @@
 import streamlit as str
-import streamlit_extras as stre
 
 from streamlit_toggle import st_toggle_switch
 from modules.kreditrechner import Tilgungsplan
 from modules.euriborparser import EuriborParser
+
+from streamlit_extras.buy_me_a_coffee import button
 
 with str.container() as container0:
     str.title("Bruttokaufpreis ermitteln")
@@ -59,8 +60,8 @@ with str.container() as container1:
             euribor = EuriborParser()
             euribor_df = euribor.parse_current()
             str.markdown(" ")
-            str.markdown(f"""3M-EURIBOR {euribor_df.index[0].date()}:  
-                         {(euribor_df.iloc[0].values[0]):.2f}%""")
+            str.markdown(f"""3M-EURIBOR {euribor_df.index[-1].date()}:  
+                         {(euribor_df.iloc[-1].values[0]):.2f}%""", help="wird jeden Werktag um 23:00 aktualisiert")
 
         quartalsgebühren = str.number_input(label="Quartalsgebühren eingeben: ", step=1, value=50)
 
@@ -91,12 +92,18 @@ with str.container() as container2:
 
     str.markdown("""**ACHTUNG** - natürlich fließen in eine Bonitätsprüfung einer Bank viel mehr Faktoren ein wie zum Beispiel:  
                  - eine positive Haushaltsrechnung  
-                 - Besicherung (LTV)
+                 - Besicherung (LTV)  
                  - Kontoverhalten  
                  - soft Facts (Dienstverhältins, ...)""")
                    
-    str.markdown("""Weiters wird für die Berechnung der DSTI noch ein erhöhter Zinssatz angesetzt (in dem Beispiel nicht - ist noch in arbeit - stay tuned :e-mail: :arrow_down_small:)""")
-    str.markdown("Details zu den Kennzahlen findet man bei der **[Nationalbank](https://www.oenb.at/finanzmarkt/makroprudenzielle-aufsicht/massnahmen_und_methoden/begrenzung_systemischer_risiken_aus_der_immobilienfinanzierung.html)**")
+    str.markdown("""Details zu den Kennzahlen findet man bei der  
+                 - **[Nationalbank](https://www.oenb.at/finanzmarkt/makroprudenzielle-aufsicht/massnahmen_und_methoden/begrenzung_systemischer_risiken_aus_der_immobilienfinanzierung.html)**  
+                 - **[FMA](https://www.fma.gv.at/fma-erlaesst-verordnung-fuer-nachhaltige-vergabestandards-bei-der-finanzierung-von-wohnimmobilien-kim-vo/)**""")
+
+str.divider()
+
+str.subheader("Ich würde mich sehr über einen :coffee: freuen")
+button(username="doedlingerT", floating=False, width=221)
 
 str.divider()
 

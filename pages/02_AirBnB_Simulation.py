@@ -3,6 +3,7 @@ import json
 import streamlit as str
 
 from streamlit_lottie import st_lottie
+from streamlit_extras.buy_me_a_coffee import button
 
 def load_lottiefile(filepath: str):
     with open(filepath, "r") as f:
@@ -17,6 +18,11 @@ st_lottie(
     height=200,
     width=200
 )
+
+str.divider()
+
+str.subheader("Ich würde mich sehr über einen :coffee: freuen")
+button(username="doedlingerT", floating=False, width=221)
 
 str.divider()
 

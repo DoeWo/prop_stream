@@ -32,6 +32,9 @@ class EuriborParser():
             elif EuriborParser.HEUTE.weekday() in (5,6):
                 check_tag = EuriborParser.HEUTE - dt.timedelta(days=EuriborParser.HEUTE.weekday()%4)
 
+            # die muss noch weg wenn ich weiß wann der neue EURIBOR gepostet wird
+            check_tag = dt.date(year=2023, month=8, day=11)
+
             self.current_euribor = pd.read_csv(r"./data/current_euribor.csv", index_col=0)
             self.current_euribor.index = pd.to_datetime(self.current_euribor.index)
             self.current_euribor.index.freq = "B"
@@ -40,7 +43,7 @@ class EuriborParser():
 
         except (KeyError, FileNotFoundError):
 
-            if dt.datetime.now().time() < dt.datetime.strptime("16:00", "%H:%M"):
+            if dt.datetime.now().time() < dt.datetime.strptime("23:00", "%H:%M").time():
                 self.current_euribor = pd.read_csv(r"./data/current_euribor.csv", index_col=0)
                 self.current_euribor.index = pd.to_datetime(self.current_euribor.index)
                 self.current_euribor.index.freq = "B"
