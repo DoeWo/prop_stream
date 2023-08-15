@@ -134,6 +134,7 @@ with str.container() as container3:
     str.markdown("bitte schreib mir wenn du auf dem aktuellsten Stand gehalten werden willst. Nach jedem Deployment von neuen Features wirst du dann eine E-Mail erhalten")
     str.markdown('''kommende Features:    
                  **- Tilgungsplan inkl. Kreditdashboard (Export als .xlsx)**  
+                 **- Tilgung vs. Spareinlage**  
                  **- Zinssimulation auf Basis 3M EURIBOR (Monte Carlo)**  
                  **- Rentabilitätsrechner AirBnB**''')
 
