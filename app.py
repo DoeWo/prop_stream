@@ -10,8 +10,9 @@ with str.container() as container_n1:
     str.title("Immobilien und Kreditrechner")
     str.write("""Mit diesem kleinen Tool kann man, nur mit Eingabe eines bekannten Kaufpreis einer Immobilie den Bruttokaufpreis und 
                  die Rate für einen Kredit mit 30 Jahren Laufzeit, und einem Zinssatz mit 3M EURIBOR + 1% berechnen.  
-                 Alle Felder können, müssen aber nicht, verändert werden.  
-                 Der 3M EURIBOR wird täglich aktualisiert wobei immer der Vortageswert angezeigt wird.  
+                 Der 3M EURIBOR wird täglich aktualisiert wobei immer der Vortageswert angezeigt wird. 
+                 Alle Felder können, müssen aber nicht, verändert werden.   
+                 Der Kreditrechner kann auch isoliert verwendet werden (für z.B.: einen Autokredit)  
                  Schlüsselwerte sind immer in <span style="color: green; font-size:1.15em;">**grün**</span> formatiert.""", unsafe_allow_html=True)
 
 with str.container() as container0:
