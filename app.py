@@ -8,9 +8,11 @@ from streamlit_extras.buy_me_a_coffee import button
 
 with str.container() as container_n1:
     str.title("Immobilien und Kreditrechner")
-    str.markdown("""Mit diesem kleinen Tool kann man, nur mit Eingabe eines bekannten Kaufpreis einer Immobilie den Bruttokaufpreis und 
+    str.write("""Mit diesem kleinen Tool kann man, nur mit Eingabe eines bekannten Kaufpreis einer Immobilie den Bruttokaufpreis und 
                  die Rate für einen Kredit mit 30 Jahren Laufzeit, und einem Zinssatz mit 3M EURIBOR + 1% berechnen.  
-                 Alle Felder können, müssen aber nicht, verändert werden""")
+                 Alle Felder können, müssen aber nicht, verändert werden.  
+                 Der 3M EURIBOR wird täglich aktualisiert wobei immer der Vortageswert angezeigt wird.  
+                 Schlüsselwerte sind immer in <span style="color: green; font-size:1.15em;">**grün**</span> formatiert.""", unsafe_allow_html=True)
 
 with str.container() as container0:
     str.title("Bruttokaufpreis ermitteln")
@@ -30,7 +32,7 @@ with str.container() as container0:
         2
     )
 
-    str.markdown(f"""der Bruttokaufpreis ist: **{bruttokaufpreis:,.2f}**""")
+    str.write(f"""der Bruttokaufpreis ist: <span style="color: green; font-size:1.15em;">**{bruttokaufpreis:,.2f}**</span>""", unsafe_allow_html=True)
 
 str.divider()
 
@@ -55,7 +57,7 @@ with str.container() as container1:
     if kreditbetrag < 0:
         str.write("Der Kreditbetrag muss größer als 0 sein")
     else:
-        str.markdown(f"Der Kreditbetrag ist: **{kreditbetrag:,.2f}**")
+        str.write(f"""Der Kreditbetrag ist: <span style="color: green; font-size:1.15em;">**{kreditbetrag:,.2f}**</span>""", unsafe_allow_html=True)
         kreditlaufzeit = str.number_input(label="Kreditlaufzeit in Jahren eingeben: ", step=1, value=30)
 
         col1, col2 = str.columns([0.7,0.3])
@@ -88,8 +90,8 @@ with str.container() as container1:
             pfandrechtseintragung=pfandrechtseintragung).tilgungsplan_erstellen()
         rate = round(tp.rate.mean(),2)
 
-        str.markdown(f"Die Kreditrate ist: **{rate:,.2f}**")
-        str.markdown(f"Der zurückgezahlte Gesamtbetrag ist: **{(rate * kreditlaufzeit * 12):,.2f}**")
+        str.write(f"""Die Kreditrate ist: <span style="color: green; font-size:1.15em;">**{rate:,.2f}**</span>""", unsafe_allow_html=True)
+        str.write(f"""Der zurückgezahlte Gesamtbetrag ist: <span style="color: green; font-size:1.15em;">**{(rate * kreditlaufzeit * 12):,.2f}**</span>""", unsafe_allow_html=True)
 
 str.divider()
 
@@ -106,9 +108,8 @@ with str.container() as container2:
         value=0.40,
         step=0.01
     )
-    str.markdown(f"""Um einen Kredit mit der oben berechneten Rate bedienen zu können und eine **DSTI von {dsti}** zu erfüllen müsstest du  
-                 **{(rate/dsti):.2f}**  
-                 netto pro Monat verdienen""")
+    str.write(f"""Um einen Kredit mit der oben berechneten Rate bedienen zu können und eine **DSTI von {dsti}** zu erfüllen müsstest du  
+                 <span style="color: green; font-size:1.15em;">**{(rate/dsti):.2f} netto pro Monat verdienen**</span>""", unsafe_allow_html=True)
 
     str.markdown("""**ACHTUNG** - natürlich fließen in eine Bonitätsprüfung einer Bank viel mehr Faktoren ein wie zum Beispiel:  
                  - eine positive Haushaltsrechnung  
