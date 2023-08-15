@@ -21,7 +21,6 @@ class EuriborParser():
         # I have to free the memory here, because somehow I run into troubles when running the script multiple times in a row
         self.current_euribor = None
         self.current_euribor = pd.DataFrame(columns=["3M_EURIBOR"], index=pd.DatetimeIndex([]))
-        pass
     
 
     def parse_historic(self):
@@ -60,6 +59,7 @@ class EuriborParser():
                 self.current_euribor.loc[date] = percentage
                 self.current_euribor.to_csv(r"./data/current_euribor.csv", mode="a", header=False, index=True)
                 self.current_euribor = pd.read_csv(r"./data/current_euribor.csv", index_col=0, names=["3M_EURIBOR"])
+                self.current_euribor.index = pd.to_datetime(self.current_euribor.index)
                 print("read from Homepage")
 
         return self.current_euribor.tail(1)
