@@ -1,5 +1,6 @@
 import requests as r
 import datetime as dt
+import pytz
 import pandas as pd
 
 from bs4 import BeautifulSoup
@@ -14,6 +15,7 @@ class EuriborParser():
     URL_CURR = 'https://www.euribor-rates.eu/en/current-euribor-rates/2/euribor-rate-3-months/'
     YEARS = list(range(1999,dt.datetime.today().year + 1))
     HEUTE = dt.datetime.today()
+    TZ = pytz.timezone('Europe/Berlin')
 
     def __init__(self, current_euribor=None):
         # I have to free the memory here, because somehow I run into troubles when running the script multiple times in a row
@@ -43,7 +45,7 @@ class EuriborParser():
             print("read from csv before exception")
 
         except (KeyError, FileNotFoundError):
-            if dt.datetime.now().time() < dt.datetime.strptime("14:00", "%H:%M").time():
+            if dt.datetime.now(EuriborParser.TZ).time() < dt.datetime.strptime("14:00", "%H:%M").time():
                 self.current_euribor = pd.read_csv(r"./data/current_euribor.csv", index_col=0, names=["3M_EURIBOR"])
                 self.current_euribor.index = pd.to_datetime(self.current_euribor.index)
                 print("read from csv after exception")
