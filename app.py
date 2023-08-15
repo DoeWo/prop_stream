@@ -24,7 +24,7 @@ with str.container() as container0:
         2
     )
 
-    str.write(f"der Bruttokaufpreis ist: {bruttokaufpreis}")
+    str.markdown(f"""der Bruttokaufpreis ist: {bruttokaufpreis}""")
 
 str.divider()
 
