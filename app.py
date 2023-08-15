@@ -92,6 +92,7 @@ with str.container() as container1:
 
         str.write(f"""Die Kreditrate ist: <span style="color: green; font-size:1.15em;">**{rate:,.2f}**</span>""", unsafe_allow_html=True)
         str.write(f"""Der zurückgezahlte Gesamtbetrag ist: <span style="color: green; font-size:1.15em;">**{(rate * kreditlaufzeit * 12):,.2f}**</span>""", unsafe_allow_html=True)
+        str.write(f"""Der effektive Jahreszins ist: <span style="color: green; font-size:1.15em;">**{0 if kaufpreis == 0 else ((((rate*kreditlaufzeit*12)-kreditbetrag)/kreditbetrag)*(24/((kreditlaufzeit*12)+1))*100):,.2f}%**</span>""", unsafe_allow_html=True)
 
 str.divider()
 
