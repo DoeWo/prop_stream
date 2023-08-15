@@ -109,7 +109,7 @@ with str.container() as container2:
         step=0.01
     )
     str.write(f"""Um einen Kredit mit der oben berechneten Rate bedienen zu können und eine **DSTI von {dsti}** zu erfüllen müsstest du  
-                 <span style="color: green; font-size:1.15em;">**{(rate/dsti):.2f} netto pro Monat verdienen**</span>""", unsafe_allow_html=True)
+                 <span style="color: green; font-size:1.15em;">**{(rate/dsti):,.2f} netto pro Monat verdienen**</span>""", unsafe_allow_html=True)
 
     str.markdown("""**ACHTUNG** - natürlich fließen in eine Bonitätsprüfung einer Bank viel mehr Faktoren ein wie zum Beispiel:  
                  - eine positive Haushaltsrechnung  
