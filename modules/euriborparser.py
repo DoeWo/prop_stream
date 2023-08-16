@@ -19,7 +19,6 @@ class EuriborParser():
 
     def __init__(self, current_euribor=None):
         # I have to free the memory here, because somehow I run into troubles when running the script multiple times in a row
-        self.current_euribor = None
         self.current_euribor = pd.DataFrame(columns=["3M_EURIBOR"], index=pd.DatetimeIndex([]))
     
 
@@ -44,7 +43,7 @@ class EuriborParser():
             print("read from csv before exception")
 
         except (KeyError, FileNotFoundError):
-            if dt.datetime.now(EuriborParser.TZ).time() < dt.datetime.strptime("23:00", "%H:%M").time():
+            if dt.datetime.now(EuriborParser.TZ).time() < dt.datetime.strptime("19:00", "%H:%M").time():
                 self.current_euribor = pd.read_csv(r"./data/current_euribor.csv", index_col=0, names=["3M_EURIBOR"])
                 self.current_euribor.index = pd.to_datetime(self.current_euribor.index)
                 print("read from csv after exception")
@@ -56,9 +55,13 @@ class EuriborParser():
                 date = first_row.find_all('td')[0].text
                 percentage = first_row.find_all('td')[1].text.strip().rstrip(" %")
                 date = dt.datetime.strptime(date, "%m/%d/%Y")
-                self.current_euribor.loc[date] = percentage
-                self.current_euribor.to_csv(r"./data/current_euribor.csv", mode="a", header=False, index=True)
+
+                # from here the code works but is very inefficient, I should only append the values
                 self.current_euribor = pd.read_csv(r"./data/current_euribor.csv", index_col=0, names=["3M_EURIBOR"])
+                self.current_euribor.index = pd.to_datetime(self.current_euribor.index)
+                self.current_euribor.loc[date] = percentage
+                self.current_euribor.to_csv(r"./data/current_euribor.csv", mode="w", header=False, index=True)
+                #self.current_euribor = pd.read_csv(r"./data/current_euribor.csv", index_col=0, names=["3M_EURIBOR"])
                 self.current_euribor.index = pd.to_datetime(self.current_euribor.index)
                 print("read from Homepage")
 
