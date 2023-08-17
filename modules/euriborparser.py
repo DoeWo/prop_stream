@@ -24,11 +24,12 @@ class EuriborParser():
 
     def parse_historic(self):
         pass
-
+    
     def parse_current(self):
         """
         This function gets the most recent EURIBOR value
         """
+
         try:
             if EuriborParser.HEUTE.weekday() in (1,2,3,4):
                 check_tag = EuriborParser.HEUTE - dt.timedelta(days=1)
@@ -44,7 +45,7 @@ class EuriborParser():
 
         except (KeyError, FileNotFoundError):
             if dt.datetime.now(EuriborParser.TZ).time() < dt.datetime.strptime("14:00", "%H:%M").time():
-                self.current_euribor = pd.read_csv(r"./data/current_euribor.csv", index_col=0, names=["3M_EURIBOR"])
+                self.current_euribor = pd.read_csv(r"./data/current_euribor.csv", index_col=0, names=["3M_EURIBOR"]) 
                 self.current_euribor.index = pd.to_datetime(self.current_euribor.index)
                 print("read from csv after exception")
             else:   
@@ -61,7 +62,6 @@ class EuriborParser():
                 self.current_euribor.index = pd.to_datetime(self.current_euribor.index)
                 self.current_euribor.loc[date] = percentage
                 self.current_euribor.to_csv(r"./data/current_euribor.csv", mode="w", header=False, index=True)
-                #self.current_euribor = pd.read_csv(r"./data/current_euribor.csv", index_col=0, names=["3M_EURIBOR"])
                 self.current_euribor.index = pd.to_datetime(self.current_euribor.index)
                 print("read from Homepage")
 
@@ -70,5 +70,4 @@ class EuriborParser():
 
 if __name__ == "__main__":
     test = EuriborParser()
-    current = test.parse_current()
-    print(current)
+    print(test.parse_current())

@@ -6,6 +6,12 @@ from modules.euriborparser import EuriborParser
 
 from streamlit_extras.buy_me_a_coffee import button
 
+@str.cache_data
+def get_euribor():
+    euribor = EuriborParser()
+    df = euribor.parse_current()
+    return df
+
 with str.container() as container_n1:
     str.title("Immobilien und Kreditrechner")
     str.write("""Mit diesem kleinen Tool kann man, nur mit Eingabe eines bekannten Kaufpreis einer Immobilie den Bruttokaufpreis und 
@@ -63,8 +69,8 @@ with str.container() as container1:
 
         col1, col2 = str.columns([0.7,0.3])
 
-        euribor = EuriborParser()
-        euribor_df = euribor.parse_current()        
+        # get the euribor from module with function (so it can be cached)
+        euribor_df = get_euribor()
 
         with col1:
             zinssatz = str.number_input(label="Zinssatz eingeben: ", step=0.01, help="so ungefähr 1 - 2 Aufschlag auf EURIBOR", value=euribor_df.iloc[-1].values[0]+1)
