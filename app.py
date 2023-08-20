@@ -1,16 +1,18 @@
 import streamlit as str
 
+
 from streamlit_toggle import st_toggle_switch
 from modules.kreditrechner import Tilgungsplan
 from modules.euriborparser import EuriborParser
+
 
 from streamlit_extras.buy_me_a_coffee import button
 
 @str.cache_data
 def get_euribor():
     euribor = EuriborParser()
-    df = euribor.parse_current()
-    return df
+    euribor, date = euribor.parse_current()
+    return float(euribor), date
 
 with str.container() as container_n1:
     str.title("Immobilien und Kreditrechner")
@@ -39,7 +41,7 @@ with str.container() as container0:
         2
     )
 
-    str.write(f"""der Bruttokaufpreis ist: <span style="color: green; font-size:1.15em;">**{bruttokaufpreis:,.2f}**</span>""", unsafe_allow_html=True)
+    str.write(f"""der Bruttokaufpreis ist: <span style="color: green; font-size:1.15em;">**{0 if kaufpreis == 0 else bruttokaufpreis:,.2f}**</span>""", unsafe_allow_html=True)
 
 str.divider()
 
@@ -70,18 +72,18 @@ with str.container() as container1:
         col1, col2 = str.columns([0.7,0.3])
 
         # get the euribor from module with function (so it can be cached)
-        euribor_df = get_euribor()
+        euribor, date = get_euribor()
 
         with col1:
-            zinssatz = str.number_input(label="Zinssatz eingeben: ", step=0.01, help="so ungefähr 1 - 2 Aufschlag auf EURIBOR", value=euribor_df.iloc[-1].values[0]+1)
+            zinssatz = str.number_input(label="Zinssatz eingeben: ", step=0.01, help="so ungefähr 1 - 2 Aufschlag auf EURIBOR", value=euribor+1)
 
         with col2:
 
             str.markdown(" ")
-            str.markdown(f"""3M-EURIBOR {euribor_df.index[-1].date()}:  
-                         {(euribor_df.iloc[-1].values[0]):.2f}%""", help="immer der 3M EURIBOR vom Vortag")
+            str.markdown(f"""3M-EURIBOR {date}:  
+                         {(euribor):.2f}%""", help="immer der 3M EURIBOR vom Vortag, aktualisiert um 14:00")
 
-        quartalsgebühren = str.number_input(label="Quartalsgebühren eingeben: ", step=1, value=50)
+        quartalsgebühren = str.number_input(label="Quartalsgebühren eingeben: ", step=1, help="50,-- ist eine gute Indikation")
 
         str.subheader("Finanzierungsnebenkosten:")
         vermittlerprovision = str.number_input("Vermittlerprovision eingeben:", step=1)
