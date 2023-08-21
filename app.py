@@ -91,7 +91,7 @@ with str.container() as container1:
                                                  value=kreditbetrag*0.012)
         
         tp = Tilgungsplan(
-            kreditbetrag=projektsumme, 
+            kreditbetrag=kreditbetrag, 
             kreditlaufzeitInJahren=kreditlaufzeit, 
             zinssatz=zinssatz, 
             quartalsgebuehren=quartalsgebühren,
