@@ -8,7 +8,7 @@ from modules.euriborparser import EuriborParser
 
 from streamlit_extras.buy_me_a_coffee import button
 
-@str.cache_data
+
 def get_euribor():
     euribor = EuriborParser()
     euribor, date = euribor.parse_current()
