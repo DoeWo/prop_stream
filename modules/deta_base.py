@@ -13,6 +13,9 @@ class Euribor_DB():
     def add_euribor(self, date=None, euribor=None):
         return self.deta_base.put({"key":date, "euribor":euribor})
     
+    def add_hist_euribor(self, date, euribor):
+        return self.deta_base.put({"key": date, "index": "3M_EURIBOR", "value": euribor})
+    
     def get_euribor(self, date:str):
         return self.deta_base.fetch(query={"key": date}).items[-1]["euribor"], self.deta_base.fetch(query={"key": date}).items[-1]["key"]
 

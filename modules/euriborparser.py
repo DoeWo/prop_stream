@@ -6,6 +6,8 @@ import pandas as pd#
 from bs4 import BeautifulSoup
 from pathlib import Path
 
+from time import sleep
+
 if __name__ == "__main__":
     from deta_base import Euribor_DB
 else:
@@ -27,11 +29,66 @@ class EuriborParser():
     def __init__(self, current_euribor=None, deta_base=None):
         # I have to free the memory here, because somehow I run into troubles when running the script multiple times in a row
         self.current_euribor = pd.DataFrame(columns=["3M_EURIBOR"], index=pd.DatetimeIndex([]))
-        self.deta_base = Euribor_DB(deta_key=secrets["data_key"], deta_base="db_euribor")
+        
     
 
     def parse_historic(self):
-        pass
+
+        self.deta_base = Euribor_DB(deta_key=secrets["data_key"], deta_base="db_hist_euribor")
+
+        for x in EuriborParser.YEARS[::-1]:
+            if x != 2023:
+                continue
+            
+            headers = []
+            index = []
+            content = []
+            
+            request = r.get(f"{EuriborParser.URL_HIST}/{x}/")
+            soup = BeautifulSoup(request.content, 'lxml')
+
+            table = soup.find('div', class_='card-body')
+
+            # noch verbessern mit list comprehension
+            table_headers = table.findAll('th', class_="text-right")
+            for x in table_headers:
+                headers.append(x.text)
+            print(headers)
+
+            # noch verbessern mit list comprehension
+            indizes = table.find('tbody').findAll('th')
+            for x in indizes:
+                index.append(dt.datetime.strptime(x.text, '%m/%d/%Y').strftime('%Y-%m-%d'))
+            print(index)
+
+            values = table.find('tbody').findAll('td', class_='text-right')
+            
+            print(values)
+            print("\n\n")
+            interm_content = [values[i:i+len(headers)] for i in range(0, len(values), len(headers))]
+            print(interm_content)
+            print(len(interm_content))
+            content = [[x.text.strip().rstrip(" %") for x in sublist] for sublist in interm_content]
+            print(content)
+            print(len(content))
+
+
+            df = pd.DataFrame(data=content, columns=headers, index=index)
+            print(df)
+
+            for index, row in df[["Euribor 3 months"]].iterrows():
+                self.deta_base.add_hist_euribor(date=index, euribor=row[0])
+                sleep(1)
+                print("next item")
+            
+            sleep(30)
+            print("next Year")
+
+
+
+
+      
+        return None
     
     def parse_current(self):
         """
@@ -45,6 +102,7 @@ class EuriborParser():
         elif EuriborParser.HEUTE.weekday() == 0:
             check_tag = EuriborParser.HEUTE - dt.timedelta(days=3)
 
+        self.deta_base = Euribor_DB(deta_key=secrets["data_key"], deta_base="db_euribor")
 
         try:
             query1_tag = check_tag.strftime("%Y-%m-%d")
@@ -80,3 +138,4 @@ if __name__ == "__main__":
     test = EuriborParser()
     euribor, date = test.parse_current()
     print(euribor, date)
+    #test.parse_historic()
