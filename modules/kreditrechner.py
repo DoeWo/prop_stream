@@ -21,7 +21,9 @@ class Tilgungsplan():
     """
 
     TODAY = dt.date.today()
-    START = dt.date(year=TODAY.year, month=TODAY.month+1, day=1)
+    START = dt.date(year=TODAY.year, 
+                    month=TODAY.month+1 if TODAY.month!=12 else 1, 
+                    day=1)
 
     def __init__(self, kreditbetrag, kreditlaufzeitInJahren, zinssatz, quartalsgebuehren, vermittlerprovision, pfandrechtseintragung):
         self.kreditlaufzeitInJahren = kreditlaufzeitInJahren
