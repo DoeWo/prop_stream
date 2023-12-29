@@ -21,7 +21,7 @@ class Tilgungsplan():
     """
 
     TODAY = dt.date.today()
-    START = dt.date(year=TODAY.year, 
+    START = dt.date(year=TODAY.year if TODAY.month!=12 else TODAY.year+1, 
                     month=TODAY.month+1 if TODAY.month!=12 else 1, 
                     day=1)
 
