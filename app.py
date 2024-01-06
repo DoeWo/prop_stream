@@ -123,7 +123,7 @@ str.divider()
 with str.container() as container5:
     str.header("Statistik")
     str.write(f"""Kummulierter Cash Flow: <span style="color: green; font-size:1.15em;">**{(gesamteinnahmen - rate * kreditlaufzeit * 12):,.2f}**</span>""", unsafe_allow_html=True)
-    str.write(f"""Möglicher Immo-Wert bei 2% Inflation: <span style="color: green; font-size:1.15em;">**{kaufpreis*(1+0.02)**30:,.2f}**</span>""", unsafe_allow_html=True)
+    str.write(f"""Möglicher Immo-Wert bei 1% Wertsteigerung p.a.: <span style="color: green; font-size:1.15em;">**{kaufpreis*(1+0.01)**30:,.2f}**</span>""", unsafe_allow_html=True)
     str.write(f"""""")
 
 str.divider()
