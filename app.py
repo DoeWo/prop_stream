@@ -2,7 +2,7 @@ import streamlit as str
 
 
 from streamlit_toggle import st_toggle_switch
-from modules.kreditrechner import Tilgungsplan
+from modules.kreditrechner import Tilgungsplan, finrech
 from modules.euriborparser import EuriborParser
 
 
@@ -102,6 +102,29 @@ with str.container() as container1:
         str.write(f"""Die Kreditrate ist: <span style="color: green; font-size:1.15em;">**{rate:,.2f}**</span>""", unsafe_allow_html=True)
         str.write(f"""Der zurückgezahlte Gesamtbetrag ist: <span style="color: green; font-size:1.15em;">**{(rate * kreditlaufzeit * 12):,.2f}**</span>""", unsafe_allow_html=True)
         str.write(f"""Der effektive Jahreszins ist: <span style="color: green; font-size:1.15em;">**{0 if kaufpreis == 0 else ((((rate*kreditlaufzeit*12)-kreditbetrag)/kreditbetrag)*(24/((kreditlaufzeit*12)+1))*100):,.2f}%**</span>""", unsafe_allow_html=True)
+
+str.divider()
+
+with str.container() as container4:
+    str.header("Mietrechner")
+    mtl_miete = str.number_input("Monatliche Mieteinnahmen eingeben", step=1)
+    icnr = str.number_input("Jährliche Mieterhöhung in %:", step=1)
+    mt_ausf = str.number_input("Mietausfälle in %", step=1)
+    inst = str.number_input("Instandhaltungskosten pro Monat als % der Miete:", step=1)
+
+    miete_engine = finrech(mtl_miete, icnr, kreditlaufzeit*12)
+    gesamteinnahmen = miete_engine.calc_tot_payments()*(1-mt_ausf/100)*(1-inst/100)
+
+    str.write(f"""Mieteinnhamen Gesamtlaufzeit (ohne Ausfälle): 
+              <span style="color: green; font-size:1.15em;">**{gesamteinnahmen:,.2f}**</span>""", unsafe_allow_html=True)
+
+str.divider()
+
+with str.container() as container5:
+    str.header("Statistik")
+    str.write(f"""Kummulierter Cash Flow: <span style="color: green; font-size:1.15em;">**{(gesamteinnahmen - rate * kreditlaufzeit * 12):,.2f}**</span>""", unsafe_allow_html=True)
+    str.write(f"""Möglicher Immo-Wert bei 2% Inflation: <span style="color: green; font-size:1.15em;">**{kaufpreis*(1+0.02)**30:,.2f}**</span>""", unsafe_allow_html=True)
+    str.write(f"""""")
 
 str.divider()
 

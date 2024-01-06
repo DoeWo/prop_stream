@@ -95,6 +95,25 @@ class Tilgungsplan():
         return self.tilgungsplan
 
 
+class finrech():
+
+    def __init__(self, in_p, inter, period):
+        self.in_p = in_p
+        self.inter = inter
+        self.period = period
+
+    def calc_tot_payments(self):
+        total = 0 
+        current_payment = self.in_p
+
+        for per in range(1, self.period + 1):
+            total += current_payment
+            if per % 12 == 0:
+                current_payment += current_payment * (self.inter / 100)
+        
+        return total
+
+
 if __name__ == "__main__":
     test = Tilgungsplan(100000, 30, 3.5, 50)
     tilgungsplan = test.tilgungsplan_erstellen()
