@@ -3,7 +3,7 @@ import streamlit as str
 
 from streamlit_toggle import st_toggle_switch
 from modules.kreditrechner import Tilgungsplan, finrech
-from modules.euriborparser import EuriborParser
+#from modules.euriborparser import EuriborParser
 
 
 from streamlit_extras.buy_me_a_coffee import button
@@ -72,16 +72,16 @@ with str.container() as container1:
             euribor, date = euribor.parse_current()
             return float(euribor), date
         
-        euribor, date = get_euribor()
+        #euribor, date = get_euribor()
 
         with col1:
-            zinssatz = str.number_input(label="Zinssatz eingeben: ", step=0.01, help="so ungefähr 1 - 2 Aufschlag auf EURIBOR", value=euribor+1)
+            zinssatz = str.number_input(label="Zinssatz eingeben: ", step=0.01, help="so ungefähr 1 - 2 Aufschlag auf EURIBOR")#, value=euribor+1)
 
         with col2:
 
             str.markdown(" ")
             str.markdown(f"""3M-EURIBOR {date}:  
-                         {(euribor):.3f}%""", help="immer der 3M EURIBOR vom Vortag, aktualisiert um 14:15")
+                         {(0.00):.3f}%""", help="immer der 3M EURIBOR vom Vortag, aktualisiert um 14:15")
 
         quartalsgebühren = str.number_input(label="Quartalsgebühren eingeben: ", step=1, help="50,-- ist eine gute Indikation")
 
