@@ -80,8 +80,8 @@ with str.container() as container1:
         with col2:
 
             str.markdown(" ")
-            str.markdown(f"""3M-EURIBOR {date}:  
-                         {(euribor):.3f}%""", help="immer der 3M EURIBOR vom Vortag, aktualisiert um 14:15")
+            str.markdown(f"""3M-EURIBOR {0}:  
+                         {(0.00):.3f}%""", help="immer der 3M EURIBOR vom Vortag, aktualisiert um 14:15")
 
         quartalsgebühren = str.number_input(label="Quartalsgebühren eingeben: ", step=1, help="50,-- ist eine gute Indikation")
 
